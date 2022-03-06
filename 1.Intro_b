@@ -1,0 +1,128 @@
+---
+title: "Polygenic Power Calculator for GWAS"
+date: "2021-06-11"
+author: Talia Wu
+output: rmdformats::readthedown
+  
+---
+
+
+
+<style type="text/css"> 
+ h2 { /* Header 2 */ 
+  font-size: 20px;
+  color: DarkBlue; 
+} 
+ h3 { /* Header 3 */ 
+  font-size: 18px;
+  color: DarkRed; 
+}
+body{ /* Normal  */ 
+  font-size: 16px; 
+} 
+</style> 
+
+## Purpose     
+
+This website provides power calculation for genome-wide association studies (GWAS) and calculates the expected prediction accuracy of polygenic scores constructed by ordinary least square estimate and posterior mean of true effect size under the assmption of point-normal effect size distribution.       
+
+This website can help you predict key GWAS outcomes and calculate the minimal sample size needed to detect a desired number of nearly independent SNPs that are significantly associated with the phenotype you are interested under different study designs.
+
+***
+
+## Model and assumptions
+
+### Polygenic Model      
+
+<center>$\small y_j=\sum_{i=1}^m \beta_ix_{ij}+E_j$ $\text{ }$  $\small j = 1,2,...n$  </center>     
+
+&nbsp;
+
+where $\small y_j$ represents the phenotypic value if the phenotype is quantitative and liability if the phenotype is qualitative. $\small x_{ij}$ is the number of non-reference allele at the $\small i^{th}$ locus. $\small \beta_i$ is the true effect of the $\small i^{th}$ SNP on the phenotype. $\small E_j$ is the environmental and other unmeasured risk factors.
+
+### Polygenic score
+
+The true polygenic score ($\small S_j$) measures the overall genetic risk (i.e., SNP effects) of a specific trait of an individual.
+<center>$\small S_j=\sum_{i=1}^m \beta_ix_{ij}$  $\small j = 1,2,...n$   </center> 
+
+The estimated polygenic score ($\small \tilde S_j$) is a weighted combination of SNP effects on a specific trait of an individual.     
+
+<center>$\small \tilde S_j=\sum_{i=1}^m \tilde \beta_ix_{ij}, j = 1,2,...n$   </center>
+
+### Assumptions
+1. Statistics have been adjusted for hidden population stratification.
+2. Linkage disequibrium has been removed by pruning or clumping.
+3. To simplify the calculation, we assume  
+1)Phenotypes and genotypes are <span style="color: blue;">standardized</span> (i.e., $\small mean(y_j)=0, var(y_j)=1, E(x_{ij}) = 0, var(x_{ij})=1$, for $\small i = 1,2...m, j = 1,2,...n$.)      
+2)The error term $\small E_j \sim N(0,\sigma^2_E)$.
+    
+***    
+
+## Parameters     
+
+### General parameters    
+
+**$\small n$**     
+
+n is the training sample size.
+
+**$\small m$**    
+
+m is the number of nearly independent SNPs that may contribute to the phenotypic variance after pruning or clumping.     
+
+**$\small h^2$**      
+
+$\small h^2$ is the additive SNP heritability.      
+
+When the phenotype is quantitative, with **standardized** genotype and phenotype, SNP heritability is the proportion of phenotypic variance explained by $m$ nearly independent SNPs. When the phenotype is qualitative, under the threshold-liability model, heritability is on liability scale and is the proportion of explained genetic variance of liability.
+
+**$\small \pi_0$**
+
+$\small \pi_0$ is the **proportion** of SNPs that are null (i.e.,no contribution to the phenotypic variance/variance of genetic liability). The number of SNPs that contribute to phenotypic variance or variance of liability is $\small m(1-\pi_0)$.
+
+### Parameter in qualitative phenotype model
+
+**$\small K$**
+
+$\small K$ is the prevalence of disease in population. 
+        
+             
+### Study design parameters     
+
+**In extreme sample selection**   
+
+$\small T_L$ is the maximum phenotypic value of the extremely small samples.
+
+$\small T_U$ is the minimum phenotypic value of the extremely large samples. 
+
+$\small P_S$ is the percentage of extremely **small** samples in the whole sample. If samples are collected without bias, the expected percentage of extremely small samples is determined by the boundaries above and sample variance can be calculated accordingly. However, it is not practical to collect extreme samples with exactly the expected percentage, so this parameter is necessary for the sample variance calculation. 
+
+**2.In case-control study**      
+
+$\small w$ is the proportion of cases in the training sample under the case-control study design. 
+
+***  
+
+## Distribution of true effect sizes and estimates     
+
+We assume the genetic effect size $\small \beta_j$ follows the  point-normal distribution.     
+
+$$\small
+\beta_j \begin{cases}
+=0, \text{  with probability of }\pi_0 \\\\
+\sim N(0, \sigma^2), \text{  with probability of } \pi_1 \\
+\end{cases}
+$$  
+where $\sigma^2=\frac{h^2}{m(1-\pi_0)}, \pi_1 = 1- \pi_0$.      
+
+$\small \hat \beta_j$ is the ordinary least square estimate of coefficient between phenotype and the $\small j^{th}$ SNP.      
+
+Accordingly, the distribution of $\small \hat \beta_j$ is
+
+$$\small
+\hat \beta_j \sim \begin{cases}
+N(0,\frac{1}{n}), \text{  with probability of }\pi_0 \\\\
+N(0, \frac{1}{n} + \sigma^2), \text{  with probability of } \pi_1 \\
+\end{cases}
+$$  
+&nbsp;
