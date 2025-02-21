@@ -1,6 +1,6 @@
 # PPC
 
-https://twexperiment.shinyapps.io/PPC_v2_1/
+https://twexperiment.shinyapps.io/PPC_v2_2/
 
 This website provides power calculation for genome-wide association studies (GWAS) and calculates the expected prediction accuracy of polygenic scores constructed by ordinary least square estimate and posterior mean of true effect size under the assmption of point-normal effect size distribution.
 
